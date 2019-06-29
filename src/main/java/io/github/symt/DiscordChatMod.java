@@ -2,6 +2,7 @@ package io.github.symt;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.User;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -24,6 +25,7 @@ public class DiscordChatMod {
     static final IChatComponent newLine = new ChatComponentTranslation("", new Object[0]);
     static final String TOKEN_PATH = "token.txt";
     static JDA jda;
+    static User lastUser;
 
     static Logger logger;
 
@@ -47,6 +49,7 @@ public class DiscordChatMod {
     public void init(FMLInitializationEvent event) {
         ClientCommandHandler.instance.registerCommand(new DToken());
         ClientCommandHandler.instance.registerCommand(new DMessage());
+        ClientCommandHandler.instance.registerCommand(new DR());
         if (new File(DiscordChatMod.TOKEN_PATH).isFile()) {
             startup();
         }

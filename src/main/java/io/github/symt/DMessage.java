@@ -14,6 +14,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DMessage extends CommandBase {
+    public static void sendMessage(String[] args, String prefix, String user, EntityPlayer player) {
+        StringBuilder builder = new StringBuilder();
+        for (String s : args) {
+            builder.append(" " + s);
+        }
+        final String content = builder.toString().substring(1);
+        if (content.contains("~=~")) {
+            player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Hold up there, you aren't allowed to use \"~=~\" because it is important!!"));
+        } else {
+            Guild guild = DiscordChatMod.jda.getGuildById("594325352944238623");
+            guild.getTextChannelById("594358847435702282").sendMessage(prefix + "~=~" +  content).queue();
+            player.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "To " + user + ": " + EnumChatFormatting.RESET + content));
+        }
+    }
+
     public String getCommandName() {
         return "dmsg";
     }
@@ -24,11 +39,6 @@ public class DMessage extends CommandBase {
             if (args.length >= 2) {
                 final String ID = args[0];
                 args = Arrays.copyOfRange(args, 1, args.length);
-                StringBuilder builder = new StringBuilder();
-                for (String s : args) {
-                    builder.append(" " + s);
-                }
-                final String content = builder.toString().substring(1);
                 JDA jda = DiscordChatMod.jda;
                 Guild guild = jda.getGuildById("594325352944238623");
                 List<Member> usersWithName = new ArrayList<>();
@@ -50,9 +60,8 @@ public class DMessage extends CommandBase {
                     if (usersWithName.isEmpty()) {
                         player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "No user found with that name"));
                     } else {
-                        String prefix = usersWithName.get(0).getUser().getAsTag() + "~=~";
-                        guild.getTextChannelById("594358847435702282").sendMessage(prefix + content).queue();
-                        player.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "To " + ID + ": " + EnumChatFormatting.RESET + content));
+                        String prefix = usersWithName.get(0).getUser().getAsTag();
+                        sendMessage(args, prefix, usersWithName.get(0).getUser().getName(), player);
                     }
                 }
             } else {

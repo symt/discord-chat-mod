@@ -22,6 +22,7 @@ public class MessageListener extends ListenerAdapter {
         String[] messageContents = msg.split("~=~");
         if (messageContents[0].equals(DiscordChatMod.jda.getSelfUser().getAsTag()) && !DiscordChatMod.jda.getSelfUser().equals(author) && channel.getName().equalsIgnoreCase("bot-communications")) {
             if (queue.isEmpty() || !queue.getLast().equals(msg)) {
+                DiscordChatMod.lastUser = author;
                 queue.add(msg);
                 Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "From " + author.getName() + ": " + EnumChatFormatting.RESET + messageContents[1]));
             }
