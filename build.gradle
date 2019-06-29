@@ -1,0 +1,85 @@
+// For those who want the bleeding edge
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    }
+}
+plugins {
+    id "com.github.johnrengelman.shadow" version "1.2.3"
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+version = "1.0"
+group= "io.github.symt" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "DiscordChatMod"
+
+minecraft {
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+    mappings = "stable_20"
+}
+
+repositories {
+    jcenter()
+}
+
+
+dependencies {
+    compile files('libs/JDA-3.8.2_459-withDependencies-no-opus.jar')
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+shadowJar {
+    classifier = ""
+    relocate "com.iwebpp.crypto", "io.github.symt.repack.com.iwebpp.crypto"
+    relocate "com.neovisionaries.ws.client", "io.github.symt.repack.com.neovisionaries.ws.client"
+    relocate "com.sun.jna", "io.github.symt.repack.com.sun.jna"
+    relocate "com.vdurmont.emoji", "io.github.symt.repack.com.vdurmont.emoji"
+    relocate "gnu.trove", "io.github.symt.gnu.trove"
+    relocate "net.dv8tion.jda", "io.github.symt.repack.net.dv8tion.jda"
+    relocate "okhttp3", "io.github.symt.repack.okhttp3"
+    relocate "okio", "io.github.symt.repack.okio"
+    relocate "org.apache.commons.collections4", "io.github.symt.repack.org.apache.commons.collections4"
+    relocate "org.apache.commons.lang3", "io.github.symt.repack.org.apache.commons.lang3"
+    relocate "org.json", "io.github.symt.repack.org.json"
+    relocate "tomp2p.opuswrapper", "io.github.symt.repack.tomp2p.opuswrapper"
+
+    dependencies {
+        include(dependency("JDA:JDA:3.8.2_459:withDependencies-no-opus"))
+    }
+}
+
+reobf { shadowJar { mappingType = "SEARGE" } }
+tasks.reobfShadowJar.mustRunAfter shadowJar
