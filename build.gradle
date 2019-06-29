@@ -39,6 +39,7 @@ repositories {
 
 dependencies {
     compile files('libs/JDA-3.8.2_459-withDependencies-no-opus.jar')
+    compile files('libs/slf4j-api-1.7.25.jar')
 }
 
 processResources
@@ -67,17 +68,19 @@ shadowJar {
     relocate "com.neovisionaries.ws.client", "io.github.symt.repack.com.neovisionaries.ws.client"
     relocate "com.sun.jna", "io.github.symt.repack.com.sun.jna"
     relocate "com.vdurmont.emoji", "io.github.symt.repack.com.vdurmont.emoji"
-    relocate "gnu.trove", "io.github.symt.gnu.trove"
+    relocate "gnu.trove", "io.github.symt.repack.gnu.trove"
     relocate "net.dv8tion.jda", "io.github.symt.repack.net.dv8tion.jda"
     relocate "okhttp3", "io.github.symt.repack.okhttp3"
     relocate "okio", "io.github.symt.repack.okio"
     relocate "org.apache.commons.collections4", "io.github.symt.repack.org.apache.commons.collections4"
     relocate "org.apache.commons.lang3", "io.github.symt.repack.org.apache.commons.lang3"
     relocate "org.json", "io.github.symt.repack.org.json"
+    relocate "org.slf4j", "io.github.symt.repack.org.slf4j"
     relocate "tomp2p.opuswrapper", "io.github.symt.repack.tomp2p.opuswrapper"
 
     dependencies {
         include(dependency("JDA:JDA:3.8.2_459:withDependencies-no-opus"))
+        include(dependency("org.slf4j:slf4j-api:1.7.25"))
     }
 }
 

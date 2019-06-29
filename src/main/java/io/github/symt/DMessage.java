@@ -30,7 +30,6 @@ public class DMessage extends CommandBase {
                 final String content = builder.toString().substring(1);
                 JDA jda = DiscordChatMod.jda;
                 User user;
-                DiscordChatMod.logger.log(Level.ALL, jda.getUsers());
                 if (DiscordChatMod.aliases.containsKey(ID)) {
                     user = jda.getUserById(DiscordChatMod.aliases.get(ID));
                 } else {

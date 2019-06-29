@@ -37,6 +37,7 @@ public class DAlias extends CommandBase {
             File alias_file = new File(DiscordChatMod.ALIAS_PATH);
             FileWriter fw = new FileWriter(alias_file, false);
             fw.write(removeContentsFromMultilineString(key));
+            fw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
