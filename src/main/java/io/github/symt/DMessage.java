@@ -6,7 +6,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
@@ -45,18 +45,18 @@ public class DMessage extends CommandBase {
                 }
 
                 if (usersWithName.size() > 1) {
-                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Multiple users with that name, please add a tag.", new Object[0]));
+                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Multiple users with that name, please add a tag."));
                 } else {
                     if (usersWithName.isEmpty()) {
-                        player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "No user found with that name", new Object[0]));
+                        player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "No user found with that name"));
                     } else {
-                        String prefix = usersWithName.get(0).getUser().getAsTag() + "|||";
+                        String prefix = usersWithName.get(0).getUser().getAsTag() + "~=~";
                         guild.getTextChannelById("594358847435702282").sendMessage(prefix + content).queue();
-                        player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.LIGHT_PURPLE + "To " + ID + ": " + EnumChatFormatting.RESET + content));
+                        player.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "To " + ID + ": " + EnumChatFormatting.RESET + content));
                     }
                 }
             } else {
-                player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Please provide a valid user and message", new Object[0]));
+                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Please provide a valid user and message"));
             }
         }
     }

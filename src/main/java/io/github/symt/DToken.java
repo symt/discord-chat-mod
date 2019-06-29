@@ -3,7 +3,7 @@ package io.github.symt;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.io.File;
@@ -17,14 +17,14 @@ public class DToken extends CommandBase {
 
     public void processCommand(final ICommandSender ics, final String[] args) {
         if (ics instanceof EntityPlayer) {
-            final EntityPlayer player = (EntityPlayer)ics;
+            final EntityPlayer player = (EntityPlayer) ics;
             player.addChatMessage(DiscordChatMod.newLine);
             if (args.length == 1) {
                 File token_file = new File(DiscordChatMod.TOKEN_PATH);
                 if (token_file.isFile()) {
-                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Your token has been replaced", new Object[0]));
+                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Your token has been replaced"));
                 } else {
-                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Your token has been set", new Object[0]));
+                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Your token has been set"));
                 }
                 try {
                     FileWriter fw = new FileWriter(token_file, false);
@@ -35,7 +35,7 @@ public class DToken extends CommandBase {
                     e.printStackTrace();
                 }
             } else {
-                player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Please provide a token - /dtoken (token)", new Object[0]));
+                player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Please provide a token - /dtoken (token)"));
             }
             player.addChatMessage(DiscordChatMod.newLine);
         }

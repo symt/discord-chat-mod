@@ -16,9 +16,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @Mod(modid = DiscordChatMod.MODID, version = DiscordChatMod.VERSION)
 public class DiscordChatMod {
@@ -39,16 +36,6 @@ public class DiscordChatMod {
         } catch (InterruptedException | LoginException | IOException e) {
             e.printStackTrace();
         }
-    }
-
-    static String readFile(String path, Charset encoding) {
-        try {
-            byte[] encoded = Files.readAllBytes(Paths.get(path));
-            return new String(encoded, encoding);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Mod.EventHandler
