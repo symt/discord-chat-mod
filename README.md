@@ -16,8 +16,7 @@ From this, you will need 2 things: client_id (how people message you, in "Genera
 7. Startup forge and join a server/world.
 8. Run `/dtoken (ENTER YOUR TOKEN FROM EARLIER)`
 9. Now that the bot is setup, you won't have to do this again unless you reset your client.
-10. When you get access to the server, you should do `/dalias add (USERNAME) (USER_ID)`. This mod can also be used to talk to anyone on discord as long as you get their user id, more about how to get that [here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-)
-11. Now, using the username you put in for the command above, type in `/dmsg (USERNAME) (MESSAGE)`
+11. Now, using the discord username of another bot, type in `/dmsg (USERNAME) (MESSAGE)`. If there are multiple users with that name, you will have to use the tag (name#0000)
 
 If you have any issues, please make sure to log an issue and I'll get back as soon as possible.
 
