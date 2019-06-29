@@ -1,16 +1,17 @@
 package io.github.symt;
 
-import com.sun.media.jfxmedia.logging.Logger;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
-import org.apache.logging.log4j.Level;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DMessage extends CommandBase {
     public String getCommandName() {
@@ -29,22 +30,39 @@ public class DMessage extends CommandBase {
                 }
                 final String content = builder.toString().substring(1);
                 JDA jda = DiscordChatMod.jda;
-                User user;
-                if (DiscordChatMod.aliases.containsKey(ID)) {
-                    user = jda.getUserById(DiscordChatMod.aliases.get(ID));
+                Guild guild = jda.getGuildById("594325352944238623");
+                List<Member> usersWithName = new ArrayList<>();
+                if (!ID.contains("#")) {
+                    usersWithName = guild.getMembersByName(ID, true);
                 } else {
-                    user = jda.getUserById(Long.parseLong(ID));
+                    List<Member> allUsers = guild.getMembers();
+                    for (Member m : allUsers) {
+                        if (m.getUser().getAsTag().equalsIgnoreCase(ID)) {
+                            usersWithName.add(m);
+                            break;
+                        }
+                    }
                 }
-                user.openPrivateChannel().queue((channel) -> channel.sendMessage(content).queue());
-                player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.LIGHT_PURPLE + "To " + user.getName() + ": " + EnumChatFormatting.RESET + content));
+
+                if (usersWithName.size() > 1) {
+                    player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Multiple users with that name, please add a tag.", new Object[0]));
+                } else {
+                    if (usersWithName.isEmpty()) {
+                        player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "No user found with that name", new Object[0]));
+                    } else {
+                        String prefix = usersWithName.get(0).getUser().getAsTag() + "|||";
+                        guild.getTextChannelById("594358847435702282").sendMessage(prefix + content).queue();
+                        player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.LIGHT_PURPLE + "To " + ID + ": " + EnumChatFormatting.RESET + content));
+                    }
+                }
             } else {
-                player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Please provide a user id (or an alias) and message", new Object[0]));
+                player.addChatMessage(new ChatComponentTranslation(EnumChatFormatting.GREEN + "Please provide a valid user and message", new Object[0]));
             }
         }
     }
 
     public String getCommandUsage(final ICommandSender sender) {
-        return "/dmsg (user id | alias) (message)";
+        return "/dmsg (user) (message)";
     }
 
     public boolean canCommandSenderUseCommand(final ICommandSender sender) {

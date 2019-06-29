@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.TreeMap;
 
 @Mod(modid = DiscordChatMod.MODID, version = DiscordChatMod.VERSION)
 public class DiscordChatMod {
@@ -27,8 +26,6 @@ public class DiscordChatMod {
     static final String VERSION = "1.0";
     static final IChatComponent newLine = new ChatComponentTranslation("", new Object[0]);
     static final String TOKEN_PATH = "token.txt";
-    static final String ALIAS_PATH = "aliases.map";
-    static TreeMap<String, String> aliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     static JDA jda;
 
     static Logger logger;
@@ -63,9 +60,6 @@ public class DiscordChatMod {
     public void init(FMLInitializationEvent event) {
         ClientCommandHandler.instance.registerCommand(new DToken());
         ClientCommandHandler.instance.registerCommand(new DMessage());
-        ClientCommandHandler.instance.registerCommand(new DAlias());
-
-        DAlias.setup();
         if (new File(DiscordChatMod.TOKEN_PATH).isFile()) {
             startup();
         }
