@@ -14,10 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DMessage extends CommandBase {
-    public static void sendMessage(String[] args, String prefix, String user, EntityPlayer player) {
+    static void sendMessageToBot(String[] args, String prefix, String user, EntityPlayer player) {
         StringBuilder builder = new StringBuilder();
         for (String s : args) {
-            builder.append(" " + s);
+            builder.append(" ");
+            builder.append(s);
         }
         final String content = builder.toString().substring(1);
         if (content.contains("~=~")) {
@@ -61,7 +62,7 @@ public class DMessage extends CommandBase {
                         player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "No user found with that name"));
                     } else {
                         String prefix = usersWithName.get(0).getUser().getAsTag();
-                        sendMessage(args, prefix, usersWithName.get(0).getUser().getName(), player);
+                        sendMessageToBot(args, prefix, usersWithName.get(0).getUser().getName(), player);
                     }
                 }
             } else {
@@ -72,9 +73,5 @@ public class DMessage extends CommandBase {
 
     public String getCommandUsage(final ICommandSender sender) {
         return "/dmsg (user) (message)";
-    }
-
-    public boolean canCommandSenderUseCommand(final ICommandSender sender) {
-        return true;
     }
 }

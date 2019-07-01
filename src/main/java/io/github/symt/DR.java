@@ -15,7 +15,7 @@ public class DR extends CommandBase {
         if (ics instanceof EntityPlayer) {
             final EntityPlayer player = (EntityPlayer) ics;
             if ( DiscordChatMod.lastUser != null) {
-                DMessage.sendMessage(args, DiscordChatMod.lastUser.getAsTag(), DiscordChatMod.lastUser.getName(), player);
+                DMessage.sendMessageToBot(args, DiscordChatMod.lastUser.getAsTag(), DiscordChatMod.lastUser.getName(), player);
             } else {
                 player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "No one has sent you a message."));
             }
@@ -24,9 +24,5 @@ public class DR extends CommandBase {
 
     public String getCommandUsage(final ICommandSender sender) {
         return "/dr (message)";
-    }
-
-    public boolean canCommandSenderUseCommand(final ICommandSender sender) {
-        return true;
     }
 }
