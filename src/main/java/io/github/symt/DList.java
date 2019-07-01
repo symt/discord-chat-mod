@@ -40,8 +40,6 @@ public class DList extends CommandBase {
                 }
             }
             player.addChatMessage(DiscordChatMod.newLine);
-            player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "(name) - (tag) (status) (bot/user)"));
-            player.addChatMessage(DiscordChatMod.newLine);
             User u;
             for (Member m : allMembers) {
                 u = m.getUser();
@@ -67,10 +65,14 @@ public class DList extends CommandBase {
                         status = EnumChatFormatting.DARK_RED + "(UNKNOWN)";
                         break;
                 }
-                status += " " + EnumChatFormatting.DARK_GREEN + ((u.isBot()) ? "BOT" : "USER" );
-                player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_GREEN + u.getName() + EnumChatFormatting.BLACK + " - " + EnumChatFormatting.DARK_GREEN + u.getAsTag() + " " + status));
+                status += " " + EnumChatFormatting.YELLOW + ((u.isBot()) ? "BOT" : "USER" );
+                player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + u.getName() + EnumChatFormatting.WHITE + " - " + EnumChatFormatting.DARK_PURPLE + u.getAsTag() + " " + status));
             }
             player.addChatMessage(DiscordChatMod.newLine);
         }
+    }
+
+    public boolean canCommandSenderUseCommand(final ICommandSender sender) {
+        return true;
     }
 }

@@ -101,4 +101,8 @@ public class DMessage extends CommandBase {
     public String getCommandUsage(final ICommandSender sender) {
         return "/dmsg (user) (message)";
     }
+
+    public boolean canCommandSenderUseCommand(final ICommandSender sender) {
+        return true;
+    }
 }

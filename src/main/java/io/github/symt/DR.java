@@ -29,4 +29,8 @@ public class DR extends CommandBase {
     public String getCommandUsage(final ICommandSender sender) {
         return "/dr (message)";
     }
+
+    public boolean canCommandSenderUseCommand(final ICommandSender sender) {
+        return true;
+    }
 }

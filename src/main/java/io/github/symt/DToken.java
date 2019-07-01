@@ -44,4 +44,8 @@ public class DToken extends CommandBase {
     public String getCommandUsage(final ICommandSender sender) {
         return "/dtoken (discord bot token)";
     }
+
+    public boolean canCommandSenderUseCommand(final ICommandSender sender) {
+        return true;
+    }
 }
