@@ -1,5 +1,6 @@
 package io.github.symt;
 
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -19,16 +20,25 @@ public class MessageListener extends ListenerAdapter {
         User author = event.getAuthor();
         MessageChannel channel = event.getChannel();
         String msg = event.getMessage().getContentDisplay();
-        String[] messageContents = msg.split("~=~");
-        if (messageContents[0].equals(DiscordChatMod.jda.getSelfUser().getAsTag()) && !DiscordChatMod.jda.getSelfUser().equals(author) && channel.getName().equalsIgnoreCase("bot-communications")) {
-            if (queue.isEmpty() || !queue.getLast().equals(msg)) {
+        if (!DiscordChatMod.jda.getSelfUser().equals(author)) {
+            if (channel.getType() == ChannelType.TEXT) {
+                String[] messageContents = msg.split("~=~");
+                if (messageContents[0].equals(DiscordChatMod.jda.getSelfUser().getAsTag()) && channel.getName().equalsIgnoreCase("bot-communications")) {
+                    if (queue.isEmpty() || !queue.getLast().equals(msg)) {
+                        DiscordChatMod.lastUser = author;
+                        queue.add(msg);
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "From " + EnumChatFormatting.DARK_PURPLE + author.getName() + EnumChatFormatting.LIGHT_PURPLE + ": " + EnumChatFormatting.RESET + messageContents[1]));
+                    }
+                }
+            } else if (channel.getType() == ChannelType.PRIVATE) {
                 DiscordChatMod.lastUser = author;
                 queue.add(msg);
-                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "From " + author.getName() + ": " + EnumChatFormatting.RESET + messageContents[1]));
+                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "From " + EnumChatFormatting.DARK_PURPLE + author.getName() + EnumChatFormatting.LIGHT_PURPLE + ": " + EnumChatFormatting.RESET + msg));
             }
-            if (queue.size() >= maxSize) {
-                queue.removeFirst();
-            }
+        }
+
+        if (queue.size() >= maxSize) {
+            queue.removeFirst();
         }
     }
 }

@@ -14,8 +14,12 @@ public class DR extends CommandBase {
     public void processCommand(final ICommandSender ics, String[] args) {
         if (ics instanceof EntityPlayer) {
             final EntityPlayer player = (EntityPlayer) ics;
-            if ( DiscordChatMod.lastUser != null) {
-                DMessage.sendMessageToBot(args, DiscordChatMod.lastUser.getAsTag(), DiscordChatMod.lastUser.getName(), player);
+            if (DiscordChatMod.lastUser != null) {
+                if (DiscordChatMod.lastUser.isBot()) {
+                    DMessage.sendMessageToBot(DMessage.formatArgs(args), DiscordChatMod.lastUser.getAsTag(), DiscordChatMod.lastUser.getName(), player);
+                } else {
+                    DMessage.sendMessageToUser(DMessage.formatArgs(args), DiscordChatMod.lastUser, player);
+                }
             } else {
                 player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "No one has sent you a message."));
             }
