@@ -1,5 +1,6 @@
-package io.github.symt;
+package io.github.symt.commands;
 
+import io.github.symt.DiscordChatMod;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -30,6 +31,15 @@ public class DMessage extends CommandBase {
     static void sendMessageToUser(String content, User user, EntityPlayer player) {
         user.openPrivateChannel().queue((channel) -> channel.sendMessage(content).queue());
         player.addChatMessage(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "To " + EnumChatFormatting.DARK_PURPLE + user.getName() + EnumChatFormatting.LIGHT_PURPLE + ": " + EnumChatFormatting.RESET + content));
+    }
+
+    static String formatArgs(String[] args) {
+        StringBuilder builder = new StringBuilder();
+        for (String s : args) {
+            builder.append(" ");
+            builder.append(s);
+        }
+        return builder.toString().substring(1);
     }
 
     public String getCommandName() {
@@ -87,15 +97,6 @@ public class DMessage extends CommandBase {
                 player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Please provide a valid user and message"));
             }
         }
-    }
-
-    static String formatArgs(String[] args) {
-        StringBuilder builder = new StringBuilder();
-        for (String s : args) {
-            builder.append(" ");
-            builder.append(s);
-        }
-        return builder.toString().substring(1);
     }
 
     public String getCommandUsage(final ICommandSender sender) {

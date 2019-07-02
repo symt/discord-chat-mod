@@ -1,5 +1,6 @@
-package io.github.symt;
+package io.github.symt.commands;
 
+import io.github.symt.DiscordChatMod;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -65,7 +66,7 @@ public class DList extends CommandBase {
                         status = EnumChatFormatting.DARK_RED + "(UNKNOWN)";
                         break;
                 }
-                status += " " + EnumChatFormatting.YELLOW + ((u.isBot()) ? "BOT" : "USER" );
+                status += " " + EnumChatFormatting.YELLOW + ((u.isBot()) ? "BOT" : "USER");
                 player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + u.getName() + EnumChatFormatting.WHITE + " - " + EnumChatFormatting.DARK_PURPLE + u.getAsTag() + " " + status));
             }
             player.addChatMessage(DiscordChatMod.newLine);

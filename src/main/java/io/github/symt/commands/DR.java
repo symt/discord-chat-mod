@@ -1,5 +1,6 @@
-package io.github.symt;
+package io.github.symt.commands;
 
+import io.github.symt.DiscordChatMod;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;

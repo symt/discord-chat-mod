@@ -1,5 +1,6 @@
-package io.github.symt;
+package io.github.symt.listeners;
 
+import io.github.symt.DiscordChatMod;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
