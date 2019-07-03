@@ -50,6 +50,7 @@ public class DiscordChatMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
+        MinecraftForge.EVENT_BUS.register(EventListener.class);
     }
 
     @EventHandler
@@ -58,7 +59,6 @@ public class DiscordChatMod {
         ClientCommandHandler.instance.registerCommand(new DMessage());
         ClientCommandHandler.instance.registerCommand(new DR());
         ClientCommandHandler.instance.registerCommand(new DList());
-        MinecraftForge.EVENT_BUS.register(EventListener.class);
         if (new File(DiscordChatMod.TOKEN_PATH).isFile()) {
             startup();
         }
