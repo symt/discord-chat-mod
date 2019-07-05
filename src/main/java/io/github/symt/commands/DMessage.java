@@ -54,6 +54,10 @@ public class DMessage extends CommandBase {
   public void processCommand(final ICommandSender ics, String[] args) {
     if (ics instanceof EntityPlayer) {
       final EntityPlayer player = (EntityPlayer) ics;
+      if (DiscordChatMod.jda == null) {
+        player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Please run /dtoken (TOKEN). Once you have, you can start messaging"));
+        return;
+      }
       if (args.length >= 2) {
         final String ID = args[0];
         args = Arrays.copyOfRange(args, 1, args.length);
