@@ -4,7 +4,7 @@
 
 There are a few things that you have to do to set this up.
 
-1. Download jar file from [here](https://github.com/symt/discord-chat-mod/releases)
+1. Download jar file from [here](https://github.com/symt/discord-chat-mod/releases). Use `DiscordChatMod-X.X.X.jar`, NOT `DiscordChatMod-X.X.X-sources.jar`
 2. Drop it in mods folder
 3. Go to https://discordapp.com/developers/applications/
 4. Click "New Application" and proceed to type in a name for your application.
