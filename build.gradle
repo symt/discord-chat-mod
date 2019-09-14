@@ -21,8 +21,8 @@ compileJava {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
 }
-version = "1.4.0"
-group= "io.github.symt"
+version = "2.0.0"
+group = "io.github.symt"
 archivesBaseName = "DiscordChatMod"
 
 minecraft {
@@ -46,7 +46,7 @@ processResources {
     inputs.property "mcversion", project.minecraft.version
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'

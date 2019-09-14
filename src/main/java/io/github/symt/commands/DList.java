@@ -39,7 +39,7 @@ public class DList extends CommandBase {
         lastUpdate = System.currentTimeMillis();
       }
 
-      int maxPage = statuses.size() / 10 + 1;
+      int maxPage = statuses.size() / 6 + 1;
       int page;
       if (args.length == 1 && args[0] != null && isString(args[0])) {
         page = Integer.parseInt(args[0]);
@@ -61,14 +61,15 @@ public class DList extends CommandBase {
       player.addChatMessage(header);
       displayPage(player, page);
       player.addChatMessage(new ChatComponentText(
-          EnumChatFormatting.YELLOW + new String(new char[("<- Page " + page + "/" + maxPage + " ->").length()])
+          EnumChatFormatting.YELLOW + new String(
+              new char[("<- Page " + page + "/" + maxPage + " ->").length()])
               .replace("\0", "-")));
       player.addChatMessage(DiscordChatMod.newLine);
     }
   }
 
   private void displayPage(EntityPlayer player, int page) {
-    for (int i = (page-1)*10; i < (page-1)*10+10 && i < statuses.size(); i++) {
+    for (int i = (page - 1) * 10; i < (page - 1) * 10 + 10 && i < statuses.size(); i++) {
       player.addChatMessage(statuses.get(i));
     }
   }
