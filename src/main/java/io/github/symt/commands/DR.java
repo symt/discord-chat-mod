@@ -16,6 +16,9 @@ public class DR extends CommandBase {
   public void processCommand(final ICommandSender ics, String[] args) {
     if (ics instanceof EntityPlayer) {
       final EntityPlayer player = (EntityPlayer) ics;
+      if (DiscordChatMod.hasNoPermissionBasedOnMode(player)) {
+        return;
+      }
       if (DiscordChatMod.lastUser != null) {
         if (DiscordChatMod.lastUser.isBot()) {
           DMessage.sendMessageToBot(DMessage.formatArgs(args), DiscordChatMod.lastUser.getAsTag(),

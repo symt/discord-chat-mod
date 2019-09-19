@@ -38,7 +38,7 @@ public class DMessage extends CommandBase {
             + EnumChatFormatting.LIGHT_PURPLE + ": " + EnumChatFormatting.RESET + content));
   }
 
-  static String formatArgs(String[] args) {
+  public static String formatArgs(String[] args) {
     StringBuilder builder = new StringBuilder();
     for (String s : args) {
       builder.append(" ");
@@ -54,7 +54,9 @@ public class DMessage extends CommandBase {
   public void processCommand(final ICommandSender ics, String[] args) {
     if (ics instanceof EntityPlayer) {
       final EntityPlayer player = (EntityPlayer) ics;
-      if (DiscordChatMod.jda == null) {
+      if (DiscordChatMod.hasNoPermissionBasedOnMode(player)) {
+        return;
+      } else if (DiscordChatMod.jda == null) {
         player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Please run /dtoken (TOKEN). Once you have, you can start messaging"));
         return;
       }

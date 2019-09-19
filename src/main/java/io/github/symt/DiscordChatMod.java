@@ -3,6 +3,7 @@ package io.github.symt;
 import io.github.symt.commands.DList;
 import io.github.symt.commands.DMessage;
 import io.github.symt.commands.DR;
+import io.github.symt.commands.DSettings;
 import io.github.symt.commands.DToken;
 import io.github.symt.listeners.EventListener;
 import io.github.symt.listeners.MessageListener;
@@ -14,7 +15,10 @@ import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.User;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +39,7 @@ public class DiscordChatMod {
   public static User lastUser;
   public static Mode userMode;
   public static Logger logger;
+  public static boolean overrideCommand = false;
 
   public static void startup() {
     try {
@@ -59,6 +64,7 @@ public class DiscordChatMod {
     ClientCommandHandler.instance.registerCommand(new DMessage());
     ClientCommandHandler.instance.registerCommand(new DR());
     ClientCommandHandler.instance.registerCommand(new DList());
+    ClientCommandHandler.instance.registerCommand(new DSettings());
     if (new File(DiscordChatMod.TOKEN_PATH).isFile()) {
       startup();
     }
@@ -66,5 +72,13 @@ public class DiscordChatMod {
 
   public enum Mode {
     RECEIVE, NORMAL
+  }
+
+  public static boolean hasNoPermissionBasedOnMode(EntityPlayer player) {
+    if (userMode == Mode.RECEIVE) {
+      player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "You don't have permission to run this command while in" + EnumChatFormatting.DARK_RED + " RECIEVE " + EnumChatFormatting.RED + "mode."));
+      return true;
+    }
+    return false;
   }
 }

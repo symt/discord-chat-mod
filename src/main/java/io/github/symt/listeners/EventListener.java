@@ -1,14 +1,18 @@
 package io.github.symt.listeners;
 
 import io.github.symt.DiscordChatMod;
+import io.github.symt.commands.DMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.json.JSONObject;
@@ -22,7 +26,7 @@ public class EventListener {
   public void onPlayerJoinEvent(FMLNetworkEvent.ClientConnectedToServerEvent event) {
     if (firstJoin) {
       firstJoin = false;
-      Minecraft.getMinecraft().addScheduledTask(() -> {
+      Minecraft.getMinecraft().addScheduledTask(() ->
         new Thread(() -> {
           try {
             URL url = new URL("https://api.github.com/repos/symt/discord-chat-mod/releases/latest");
@@ -48,7 +52,6 @@ public class EventListener {
               String current = DiscordChatMod.VERSION;
               String[] currentTag = current.split("\\.");
 
-              System.out.println(latestTag.length + " " + currentTag.length);
               if (latestTag.length == 3 && currentTag.length == 3) {
                 for (int i = 0; i < latestTag.length; i++) {
                   if (latestTag[i].compareTo(currentTag[i]) != 0) {
@@ -74,13 +77,35 @@ public class EventListener {
           } catch (IOException e) {
             e.printStackTrace();
           }
-        }).start();
-      });
+        }).start());
     }
   }
 
   @SubscribeEvent
   public void onPlayerLeaveEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
     firstJoin = true;
+  }
+
+  @SubscribeEvent
+  public void onCommand(CommandEvent event) {
+    if (DiscordChatMod.overrideCommand) {
+      String commandPrefix;
+
+      switch (event.command.getCommandName().toLowerCase()) {
+        case "msg":
+          commandPrefix = "dmsg";
+          break;
+        case "r":
+          commandPrefix = "dr";
+          break;
+        default:
+          commandPrefix = null;
+      }
+      if (event.sender instanceof EntityPlayer && commandPrefix != null) {
+        ClientCommandHandler.instance.executeCommand(event.sender,
+            String.format("/%1$s %2$s", commandPrefix, DMessage.formatArgs(event.parameters)));
+        event.setCanceled(true);
+      }
+    }
   }
 }

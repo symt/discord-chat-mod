@@ -29,7 +29,7 @@ public class DSettings extends CommandBase {
       if (args[1] != null && args[0] != null) {
 
         switch (args[0].toLowerCase()) {
-          case "druser":
+          case "replyUser":
             List<User> usersWithName = new ArrayList<>();
             List<Member> membersWithName = new ArrayList<>();
             if (args[1].contains("#")) {
@@ -52,7 +52,7 @@ public class DSettings extends CommandBase {
                       + EnumChatFormatting.DARK_GREEN + args[1]));
             }
             break;
-          case "dmode":
+          case "mode":
             switch (args[1].toLowerCase()) {
               case "receive":
                 DiscordChatMod.userMode = DiscordChatMod.Mode.RECEIVE;
@@ -62,6 +62,11 @@ public class DSettings extends CommandBase {
                 DiscordChatMod.userMode = DiscordChatMod.Mode.NORMAL;
             }
             break;
+          case "overrideCommand":
+            DiscordChatMod.overrideCommand ^= true;
+            break;
+          case "setReceiver":
+
           default:
             listSettings(player);
         }
