@@ -39,7 +39,7 @@ public class DList extends CommandBase {
         lastUpdate = System.currentTimeMillis();
       }
 
-      int maxPage = statuses.size() / 6 + 1;
+      int maxPage = (statuses.size() <= 6) ? 1 : statuses.size() / 6;
       int page;
       if (args.length == 1 && args[0] != null && isString(args[0])) {
         page = Integer.parseInt(args[0]);

@@ -16,7 +16,9 @@ import net.minecraft.util.EnumChatFormatting;
 public class DSettings extends CommandBase {
 
   private Map<String, String> settings = new HashMap<String, String>() {{
-    put("drUser", "Set user for /dr prior to recieving a message from the user");
+    put("replyUser", "Set user for /dr prior to recieving a message from the user");
+    put("mode", "Set the mode for the client (receive/normal).");
+    put("overrideCommand", "Use /msg in place of /dmsg, /r instead of /dr, etc.");
   }};
 
   public String getCommandName() {
@@ -26,10 +28,13 @@ public class DSettings extends CommandBase {
   public void processCommand(final ICommandSender ics, String[] args) {
     if (ics instanceof EntityPlayer) {
       final EntityPlayer player = (EntityPlayer) ics;
-      if (args[1] != null && args[0] != null) {
+      if (args.length > 0 && args[0] != null) {
 
         switch (args[0].toLowerCase()) {
-          case "replyUser":
+          case "replyuser":
+            if (args[1] == null) {
+              break;
+            }
             List<User> usersWithName = new ArrayList<>();
             List<Member> membersWithName = new ArrayList<>();
             if (args[1].contains("#")) {
@@ -53,6 +58,9 @@ public class DSettings extends CommandBase {
             }
             break;
           case "mode":
+            if (args[1] == null) {
+              break;
+            }
             switch (args[1].toLowerCase()) {
               case "receive":
                 DiscordChatMod.userMode = DiscordChatMod.Mode.RECEIVE;
@@ -62,22 +70,29 @@ public class DSettings extends CommandBase {
                 DiscordChatMod.userMode = DiscordChatMod.Mode.NORMAL;
             }
             break;
-          case "overrideCommand":
+          case "overridecommand":
             DiscordChatMod.overrideCommand ^= true;
             break;
-          case "setReceiver":
-
+          case "setreceiver":
+            // Will send a message to receiver notifying who to listen to for messages.
+            break;
           default:
             listSettings(player);
         }
-      } else if (args[0] != null) {
+      } else {
         listSettings(player);
       }
     }
   }
 
   private void listSettings(EntityPlayer player) {
-
+    player.addChatMessage(DiscordChatMod.newLine);
+    settings.forEach((k, v) -> {
+      player.addChatMessage(new ChatComponentText(
+          EnumChatFormatting.GREEN + k + EnumChatFormatting.DARK_GREEN + ": "
+              + EnumChatFormatting.GREEN + v));
+    });
+    player.addChatMessage(DiscordChatMod.newLine);
   }
 
   public String getCommandUsage(final ICommandSender sender) {

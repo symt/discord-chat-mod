@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import net.minecraft.client.Minecraft;
+import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -27,57 +28,58 @@ public class EventListener {
     if (firstJoin) {
       firstJoin = false;
       Minecraft.getMinecraft().addScheduledTask(() ->
-        new Thread(() -> {
-          try {
-            URL url = new URL("https://api.github.com/repos/symt/discord-chat-mod/releases/latest");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("User-Agent", USER_AGENT);
-            int responseCode = con.getResponseCode();
+          new Thread(() -> {
+            try {
+              URL url = new URL(
+                  "https://api.github.com/repos/symt/discord-chat-mod/releases/latest");
+              HttpURLConnection con = (HttpURLConnection) url.openConnection();
+              con.setRequestMethod("GET");
+              con.setRequestProperty("User-Agent", USER_AGENT);
+              int responseCode = con.getResponseCode();
 
-            if (responseCode == 200) {
-              BufferedReader in = new BufferedReader(
-                  new InputStreamReader(con.getInputStream()));
-              String inputLine;
-              StringBuilder response = new StringBuilder();
+              if (responseCode == 200) {
+                BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
 
-              while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-              }
-              in.close();
+                while ((inputLine = in.readLine()) != null) {
+                  response.append(inputLine);
+                }
+                in.close();
 
-              JSONObject json = new JSONObject(response.toString());
-              String latest = ((String) json.get("tag_name"));
-              String[] latestTag = latest.split("\\.");
-              String current = DiscordChatMod.VERSION;
-              String[] currentTag = current.split("\\.");
+                JSONObject json = new JSONObject(response.toString());
+                String latest = ((String) json.get("tag_name"));
+                String[] latestTag = latest.split("\\.");
+                String current = DiscordChatMod.VERSION;
+                String[] currentTag = current.split("\\.");
 
-              if (latestTag.length == 3 && currentTag.length == 3) {
-                for (int i = 0; i < latestTag.length; i++) {
-                  if (latestTag[i].compareTo(currentTag[i]) != 0) {
-                    Minecraft.getMinecraft().thePlayer.addChatMessage(DiscordChatMod.newLine);
-                    if (latestTag[i].compareTo(currentTag[i]) <= -1) {
-                      Minecraft.getMinecraft().thePlayer
-                          .addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN +
-                              "You are currently on a pre-release build of DiscordChatMod. Please report any bugs that you may come across"));
-                    } else if (latestTag[i].compareTo(currentTag[i]) >= 1) {
-                      Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
-                          EnumChatFormatting.GREEN + "You are currently on version "
-                              + EnumChatFormatting.DARK_GREEN + current + EnumChatFormatting.GREEN
-                              + " and the latest version is " + EnumChatFormatting.DARK_GREEN
-                              + latest + EnumChatFormatting.GREEN
-                              + ". Please update to the latest version of DiscordChatMod."));
+                if (latestTag.length == 3 && currentTag.length == 3) {
+                  for (int i = 0; i < latestTag.length; i++) {
+                    if (latestTag[i].compareTo(currentTag[i]) != 0) {
+                      Minecraft.getMinecraft().thePlayer.addChatMessage(DiscordChatMod.newLine);
+                      if (latestTag[i].compareTo(currentTag[i]) <= -1) {
+                        Minecraft.getMinecraft().thePlayer
+                            .addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN +
+                                "You are currently on a pre-release build of DiscordChatMod. Please report any bugs that you may come across"));
+                      } else if (latestTag[i].compareTo(currentTag[i]) >= 1) {
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
+                            EnumChatFormatting.GREEN + "You are currently on version "
+                                + EnumChatFormatting.DARK_GREEN + current + EnumChatFormatting.GREEN
+                                + " and the latest version is " + EnumChatFormatting.DARK_GREEN
+                                + latest + EnumChatFormatting.GREEN
+                                + ". Please update to the latest version of DiscordChatMod."));
+                      }
+                      Minecraft.getMinecraft().thePlayer.addChatMessage(DiscordChatMod.newLine);
+                      break;
                     }
-                    Minecraft.getMinecraft().thePlayer.addChatMessage(DiscordChatMod.newLine);
-                    break;
                   }
                 }
               }
+            } catch (IOException e) {
+              e.printStackTrace();
             }
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-        }).start());
+          }).start());
     }
   }
 
@@ -91,15 +93,13 @@ public class EventListener {
     if (DiscordChatMod.overrideCommand) {
       String commandPrefix;
 
-      switch (event.command.getCommandName().toLowerCase()) {
-        case "msg":
-          commandPrefix = "dmsg";
-          break;
-        case "r":
-          commandPrefix = "dr";
-          break;
-        default:
-          commandPrefix = null;
+      ICommand command = event.command;
+      if (command.getCommandAliases().contains("msg")) {
+        commandPrefix = "dmsg";
+      } else if (command.getCommandAliases().contains("reply")) {
+        commandPrefix = "dr";
+      } else {
+        commandPrefix = null;
       }
       if (event.sender instanceof EntityPlayer && commandPrefix != null) {
         ClientCommandHandler.instance.executeCommand(event.sender,

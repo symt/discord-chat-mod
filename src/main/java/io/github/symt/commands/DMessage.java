@@ -44,7 +44,7 @@ public class DMessage extends CommandBase {
       builder.append(" ");
       builder.append(s);
     }
-    return builder.toString().substring(1);
+    return (args.length == 0) ? "" : builder.toString().substring(1);
   }
 
   public String getCommandName() {
