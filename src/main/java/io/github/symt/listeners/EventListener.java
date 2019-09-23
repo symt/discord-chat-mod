@@ -94,9 +94,11 @@ public class EventListener {
       String commandPrefix;
 
       ICommand command = event.command;
-      if (command.getCommandAliases().contains("msg")) {
+      if (command.getCommandAliases().contains("msg") || command.getCommandName()
+          .equalsIgnoreCase("msg")) {
         commandPrefix = "dmsg";
-      } else if (command.getCommandAliases().contains("reply")) {
+      } else if (command.getCommandAliases().contains("r") || command.getCommandName()
+          .equalsIgnoreCase("r")) {
         commandPrefix = "dr";
       } else {
         commandPrefix = null;

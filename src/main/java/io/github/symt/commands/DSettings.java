@@ -72,6 +72,9 @@ public class DSettings extends CommandBase {
             break;
           case "overridecommand":
             DiscordChatMod.overrideCommand ^= true;
+            player.addChatMessage(new ChatComponentText(
+                EnumChatFormatting.GREEN + "overrideCommand is now set to "
+                    + EnumChatFormatting.DARK_GREEN + DiscordChatMod.overrideCommand));
             break;
           case "setreceiver":
             // Will send a message to receiver notifying who to listen to for messages.

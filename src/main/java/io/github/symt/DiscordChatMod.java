@@ -1,5 +1,6 @@
 package io.github.symt;
 
+import io.github.symt.commands.DFind;
 import io.github.symt.commands.DList;
 import io.github.symt.commands.DMessage;
 import io.github.symt.commands.DR;
@@ -31,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = DiscordChatMod.MODID, version = DiscordChatMod.VERSION)
 public class DiscordChatMod {
 
-  public static final String VERSION = "2.0.0";
+  public static final String VERSION = "2.1.0";
   public static final IChatComponent newLine = new ChatComponentTranslation("", new Object[0]);
   public static final String TOKEN_PATH = "token.txt";
   static final String MODID = "DiscordChatMod";
@@ -52,6 +53,16 @@ public class DiscordChatMod {
     }
   }
 
+  public static boolean hasNoPermissionBasedOnMode(EntityPlayer player) {
+    if (userMode == Mode.RECEIVE) {
+      player.addChatMessage(new ChatComponentText(
+          EnumChatFormatting.RED + "You don't have permission to run this command while in"
+              + EnumChatFormatting.DARK_RED + " RECIEVE " + EnumChatFormatting.RED + "mode."));
+      return true;
+    }
+    return false;
+  }
+
   @Mod.EventHandler
   public void preInit(FMLPreInitializationEvent event) {
     logger = event.getModLog();
@@ -65,6 +76,7 @@ public class DiscordChatMod {
     ClientCommandHandler.instance.registerCommand(new DR());
     ClientCommandHandler.instance.registerCommand(new DList());
     ClientCommandHandler.instance.registerCommand(new DSettings());
+    ClientCommandHandler.instance.registerCommand(new DFind());
     if (new File(DiscordChatMod.TOKEN_PATH).isFile()) {
       startup();
     }
@@ -72,13 +84,5 @@ public class DiscordChatMod {
 
   public enum Mode {
     RECEIVE, NORMAL
-  }
-
-  public static boolean hasNoPermissionBasedOnMode(EntityPlayer player) {
-    if (userMode == Mode.RECEIVE) {
-      player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "You don't have permission to run this command while in" + EnumChatFormatting.DARK_RED + " RECIEVE " + EnumChatFormatting.RED + "mode."));
-      return true;
-    }
-    return false;
   }
 }

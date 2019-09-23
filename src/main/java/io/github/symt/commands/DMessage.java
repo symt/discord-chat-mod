@@ -57,7 +57,8 @@ public class DMessage extends CommandBase {
       if (DiscordChatMod.hasNoPermissionBasedOnMode(player)) {
         return;
       } else if (DiscordChatMod.jda == null) {
-        player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Please run /dtoken (TOKEN). Once you have, you can start messaging"));
+        player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN
+            + "Please run /dtoken (TOKEN). Once you have, you can start messaging"));
         return;
       }
       if (args.length >= 2) {

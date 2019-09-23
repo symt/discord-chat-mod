@@ -15,29 +15,33 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class DList extends CommandBase {
+public class DFind extends CommandBase {
 
   private static List<IChatComponent> statuses = null;
-  private static long lastUpdate = 0;
   private static int pageSize = 8;
 
   @Override
   public String getCommandName() {
-    return "dlist";
+    return "dfind";
   }
 
   @Override
   public String getCommandUsage(ICommandSender sender) {
-    return "/dlist [page]";
+    return "/dfind (search) [page]";
   }
 
   @Override
   public void processCommand(ICommandSender ics, String[] args) {
     if (ics instanceof EntityPlayer) {
       final EntityPlayer player = (EntityPlayer) ics;
-      if (System.currentTimeMillis() - lastUpdate >= 60000) {
-        updateStatuses();
-        lastUpdate = System.currentTimeMillis();
+      if (args.length >= 1 && args.length <= 2 && args[0] != null) {
+        updateStatusesWithString(args[0]);
+      } else {
+        player.addChatMessage(DiscordChatMod.newLine);
+        player.addChatMessage(
+            new ChatComponentText(EnumChatFormatting.RED + "Please enter something to search for."));
+        player.addChatMessage(DiscordChatMod.newLine);
+        return;
       }
 
       int maxPage = statuses.size() / pageSize + 1;
@@ -51,10 +55,12 @@ public class DList extends CommandBase {
 
       ChatComponentText left = new ChatComponentText("<<");
       left.getChatStyle()
-          .setChatClickEvent(new ClickEvent(Action.RUN_COMMAND, "/dlist " + (page - 1)));
+          .setChatClickEvent(
+              new ClickEvent(Action.RUN_COMMAND, "/dfind " + args[0] + " " + (page - 1)));
       ChatComponentText right = new ChatComponentText(">>");
       right.getChatStyle()
-          .setChatClickEvent(new ClickEvent(Action.RUN_COMMAND, "/dlist " + (page + 1)));
+          .setChatClickEvent(
+              new ClickEvent(Action.RUN_COMMAND, "/dfind " + args[0] + " " + (page + 1)));
       IChatComponent header = left.appendSibling(
           new ChatComponentText(EnumChatFormatting.YELLOW + " Page " + page + "/" + maxPage + " "))
           .appendSibling(right);
@@ -85,7 +91,7 @@ public class DList extends CommandBase {
     }
   }
 
-  private void updateStatuses() {
+  private void updateStatusesWithString(String search) {
     statuses = new ArrayList<>();
     JDA jda = DiscordChatMod.jda;
     List<Guild> guilds = jda.getGuilds();
@@ -93,7 +99,7 @@ public class DList extends CommandBase {
     for (Guild g : guilds) {
       List<Member> members = g.getMembers();
       for (Member m : members) {
-        if (!allMembers.contains(m)) {
+        if (!allMembers.contains(m) && m.getUser().getName().contains(search)) {
           allMembers.add(m);
         }
       }
